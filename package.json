@@ -1,0 +1,32 @@
+{
+  "name": "yandex.praktikum_diploma_project",
+  "version": "1.0.0",
+  "description": "Diploma Yandex.Praktikum Backend",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "lint": "npx eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avlavrov/movies-explorer-api.git"
+  },
+  "author": "Alexander Lavrov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avlavrov/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/avlavrov/movies-explorer-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "celebrate": "^15.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express-winston": "^4.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.13",
+    "validator": "^13.7.0",
+    "winston": "^3.3.3"
+  }
+}
