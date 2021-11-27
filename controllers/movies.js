@@ -10,7 +10,7 @@ const getMovies = (req, res, next) => {
 const createMovie = (req, res, next) => {
   // const { name, link } = req.body;
   const owner = req.user._id;
-  return Card.create({...req.body, owner})
+  return Card.create({ ...req.body, owner })
     .then((card) => {
       res.status(200).send(card);
     })

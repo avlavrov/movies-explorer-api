@@ -19,7 +19,6 @@ class AuthentificationErrorCode extends Error {
   }
 }
 
-
 class NotAllowedUserError extends Error {
   constructor(message) {
     super(message);

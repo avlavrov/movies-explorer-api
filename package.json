@@ -2,7 +2,6 @@
   "name": "yandex.praktikum_diploma_project",
   "version": "1.0.0",
   "description": "Diploma Yandex.Praktikum Backend",
-  "main": ".eslintrc.js",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
@@ -23,10 +22,23 @@
     "celebrate": "^15.0.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "express": "^4.17.1",
     "express-winston": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",
     "validator": "^13.7.0",
     "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-react": "^7.27.1",
+    "nodemon": "^2.0.13"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app/jest"
+    ]
   }
 }

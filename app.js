@@ -6,7 +6,7 @@ const { celebrate, Joi, errors } = require('celebrate');
 const routes = require('./routes/index');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const {dbAddress} = require('./utils/constants');
+const { dbAddress } = require('./utils/constants');
 
 const options = {
   // Массив доменов, с которых разрешены кросс-доменные запросы
@@ -34,8 +34,9 @@ const app = express();
 mongoose.connect(
   NODE_ENV === 'production' ? MONGOD_URL : dbAddress,
   {
-  useNewUrlParser: true,
-});
+    useNewUrlParser: true,
+  },
+);
 
 app.use('*', cors(options)); // ПЕРВЫМ!
 app.use(express.json());
