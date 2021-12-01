@@ -6,8 +6,8 @@ module.exports = {
   },
   extends: [
     'airbnb-base',
-    'eslint:recommended',
-    'plugin:react/recommended',
+    // 'eslint:recommended',
+    // 'plugin:react/recommended',
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -21,7 +21,5 @@ module.exports = {
 
   rules: {
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
-    'no-useless-escape': 'off',
-    'max-classes-per-file': 'off',
   },
 };

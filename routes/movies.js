@@ -1,13 +1,36 @@
-/* eslint-disable no-useless-escape */
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const {
   getMovies,
   createMovie,
   deleteMovie,
 } = require('../controllers/movies');
 
-router.delete('/:movieId', deleteMovie);
+router.delete('/:movieId', celebrate(
+  {
+    params: Joi.object().keys({
+      movieId: Joi.string().hex().required().length(24),
+    }),
+  },
+), deleteMovie);
 router.get('/', getMovies);
-router.post('/', createMovie);
+router.post('/', celebrate(
+  {
+    body: Joi.object().keys({
+      nameRu: Joi.string().min(2).max(30).required(),
+      nameEn: Joi.string().min(2).max(30).required(),
+      country: Joi.string().min(2).max(30).required(),
+      director: Joi.string().min(2).max(30).required(),
+      duration: Joi.number().required(),
+      year: Joi.number().required(),
+      description: Joi.string().min(5).required(),
+      image: Joi.string().min(2).required(),
+      trailer: Joi.string().min(2).required(),
+      thumbnail: Joi.string().min(2).required(),
+      owner: Joi.string().required(),
+      movieId: Joi.string().min(2).max(30).required(),
+    }),
+  },
+), createMovie);
 
 module.exports = router;

@@ -18,6 +18,7 @@ const createMovie = (req, res, next) => {
       if (err.name === 'ValidationError') {
         throw new errors.ValidationErrorCode(`Ошибка валидации ${err.message}`);
       }
+      throw err;
     })
     .catch(next);
 };
@@ -31,9 +32,8 @@ const deleteMovie = (req, res, next) => {
       if (card.owner.toString() !== req.user._id) {
         throw new errors.NotAllowedUserError('У вас нет прав удалять чужие фильмы');
       }
-      Card.findByIdAndDelete(card._id)
-        // eslint-disable-next-line no-shadow
-        .then((card) => res.status(200).send(card));
+      return Card.findByIdAndDelete(card._id)
+        .then((c) => res.status(200).send(c));
     })
     .catch((err) => {
       if (err.name === 'CastError') {

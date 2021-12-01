@@ -22,22 +22,22 @@ const getMe = (req, res, next) => {
     .catch(next);
 };
 
-const getUser = (req, res, next) => {
-  User.findById(req.params.userId)
-    .then((user) => {
-      if (!user) {
-        throw new errors.NotFoundError('Пользователь не найден');
-      }
-      return res.status(200).send(user);
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        throw new errors.CastErrorCode('Ошибка в id пользователя');
-      }
-      next(err);
-    })
-    .catch(next);
-};
+// const getUser = (req, res, next) => {
+//   User.findById(req.params.userId)
+//     .then((user) => {
+//       if (!user) {
+//         throw new errors.NotFoundError('Пользователь не найден');
+//       }
+//       return res.status(200).send(user);
+//     })
+//     .catch((err) => {
+//       if (err.name === 'CastError') {
+//         throw new errors.CastErrorCode('Ошибка в id пользователя');
+//       }
+//       next(err);
+//     })
+//     .catch(next);
+// };
 
 const createUser = (req, res, next) => {
   const {
@@ -53,38 +53,43 @@ const createUser = (req, res, next) => {
         throw new errors.UserExistsError('Такой email уже существует');
       }
       bcrypt.hash(password, 10)
-        .then((hash) => {
-          User.create({
-            name, about, avatar, email, password: hash,
+        .then((hash) => User.create({
+          name, about, avatar, email, password: hash,
+        })
+          .then(() => {
+            res.status(200).send({
+              name, about, avatar, email,
+            });
           })
-            .then(() => {
-              res.status(200).send({
-                name, about, avatar, email,
-              });
-            })
-            .catch((err) => {
-              if (err.name === 'ValidationError') {
-                throw new errors.ValidationErrorCode(`Ошибка валидации ${err.message}`);
-              }
-            })
-            .catch(next);
-        });
+          .catch((err) => {
+            if (err.name === 'ValidationError') {
+              throw new errors.ValidationErrorCode(`Ошибка валидации ${err.message}`);
+            }
+            throw err;
+          })
+          .catch(next));
     })
     .catch(next);
 };
 
 const updateUser = (req, res, next) => {
   const { name, email } = req.body;
-  return User.findByIdAndUpdate(
-    req.user._id,
-    { name, email },
-    { runValidators: true, new: true },
-  )
+  User.findOne({ email })
     .then((user) => {
-      if (!user) {
-        throw new errors.NotFoundError('Пользователь не найден');
+      if (user) {
+        throw new errors.UserExistsError('Такой email уже существует');
       }
-      return res.status(200).send(user);
+      User.findByIdAndUpdate(
+        req.user._id,
+        { name, email },
+        { runValidators: true, new: true },
+      )
+        .then((u) => {
+          if (!u) {
+            throw new errors.NotFoundError('Пользователь не найден');
+          }
+          return res.status(200).send(u);
+        });
     })
     .catch(next);
 };
@@ -110,7 +115,7 @@ const login = (req, res, next) => {
 
 module.exports = {
   getMe,
-  getUser,
+  // getUser,
   createUser,
   updateUser,
   login,
