@@ -1,5 +1,10 @@
 const Card = require('../models/movie');
 const errors = require('../errors/errors');
+const {
+  cardNotFound,
+  notAllowedToDeleteAnothersFilms,
+  cardIdError,
+} = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
   Card.find({})
@@ -27,17 +32,17 @@ const deleteMovie = (req, res, next) => {
   Card.findById(req.params.movieId)
     .then((card) => {
       if (!card) {
-        throw new errors.NotFoundError('Карточка не найдена');
+        throw new errors.NotFoundError(cardNotFound);
       }
       if (card.owner.toString() !== req.user._id) {
-        throw new errors.NotAllowedUserError('У вас нет прав удалять чужие фильмы');
+        throw new errors.NotAllowedUserError(notAllowedToDeleteAnothersFilms);
       }
       return Card.findByIdAndDelete(card._id)
         .then((c) => res.status(200).send(c));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new errors.CastErrorCode('Ошибка в id карточки');
+        throw new errors.CastErrorCode(cardIdError);
       }
       next(err);
     })
@@ -53,11 +58,11 @@ const deleteMovie = (req, res, next) => {
 //     if (card) {
 //       return res.status(200).send(card);
 //     }
-//     throw new errors.NotFoundError('Карточка не найдена');
+//     throw new errors.NotFoundError(cardNotFound);
 //   })
 //   .catch((err) => {
 //     if (err.name === 'CastError') {
-//       throw new errors.CastErrorCode('Ошибка в id карточки');
+//       throw new errors.CastErrorCode(cardIdError);
 //     }
 //     next(err);
 //   })
@@ -72,11 +77,11 @@ const deleteMovie = (req, res, next) => {
 //     if (card) {
 //       return res.status(200).send(card);
 //     }
-//     throw new errors.NotFoundError('Карточка не найдена');
+//     throw new errors.NotFoundError(cardNotFound);
 //   })
 //   .catch((err) => {
 //     if (err.name === 'CastError') {
-//       throw new errors.CastErrorCode('Ошибка в id карточки');
+//       throw new errors.CastErrorCode(cardIdError);
 //     }
 //     next(err);
 //   })

@@ -17,8 +17,8 @@ router.get('/', getMovies);
 router.post('/', celebrate(
   {
     body: Joi.object().keys({
-      nameRu: Joi.string().min(2).max(30).required(),
-      nameEn: Joi.string().min(2).max(30).required(),
+      nameRU: Joi.string().min(2).max(30).required(),
+      nameEN: Joi.string().min(2).max(30).required(),
       country: Joi.string().min(2).max(30).required(),
       director: Joi.string().min(2).max(30).required(),
       duration: Joi.number().required(),

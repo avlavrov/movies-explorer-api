@@ -7,6 +7,7 @@ const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { dbAddress } = require('./utils/constants');
 const ceh = require('./middlewares/ceh');
+const limiter = require('./middlewares/rateLimiter');
 
 const options = {
   // Массив доменов, с которых разрешены кросс-доменные запросы
@@ -35,6 +36,7 @@ mongoose.connect(
 );
 
 app.use('*', cors(options)); // ПЕРВЫМ!
+app.use(limiter);
 app.use(express.json());
 app.use(requestLogger);
 
@@ -43,14 +45,6 @@ app.use(routes);
 app.use(errorLogger);
 // celebrate' errors
 app.use(errors());
-
-app.use((req, res) => {
-  res
-    .status(404)
-    .send({
-      message: 'ресурс не найден',
-    });
-});
 
 app.use(ceh);
 

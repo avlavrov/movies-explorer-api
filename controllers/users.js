@@ -1,7 +1,13 @@
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
-const { jwtDev } = require('../utils/constants');
+const {
+  jwtDev,
+  userNotFound,
+  userIdError,
+  wrongEmail,
+  emailExists,
+} = require('../utils/constants');
 const User = require('../models/user');
 const errors = require('../errors/errors');
 
@@ -9,13 +15,13 @@ const getMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new errors.NotFoundError('Пользователь не найден');
+        throw new errors.NotFoundError(userNotFound);
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new errors.CastErrorCode('Ошибка в id пользователя');
+        throw new errors.CastErrorCode(userIdError);
       }
       next(err);
     })
@@ -26,13 +32,13 @@ const getMe = (req, res, next) => {
 //   User.findById(req.params.userId)
 //     .then((user) => {
 //       if (!user) {
-//         throw new errors.NotFoundError('Пользователь не найден');
+//         throw new errors.NotFoundError(userNotFound);
 //       }
 //       return res.status(200).send(user);
 //     })
 //     .catch((err) => {
 //       if (err.name === 'CastError') {
-//         throw new errors.CastErrorCode('Ошибка в id пользователя');
+//         throw new errors.CastErrorCode(userIdError);
 //       }
 //       next(err);
 //     })
@@ -45,12 +51,12 @@ const createUser = (req, res, next) => {
   } = req.body;
 
   if (!validator.isEmail(email)) {
-    throw new errors.ValidationErrorCode('Проверьте правильность написания email');
+    throw new errors.ValidationErrorCode(wrongEmail);
   }
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new errors.UserExistsError('Такой email уже существует');
+        throw new errors.UserExistsError(emailExists);
       }
       bcrypt.hash(password, 10)
         .then((hash) => User.create({
@@ -77,7 +83,7 @@ const updateUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new errors.UserExistsError('Такой email уже существует');
+        throw new errors.UserExistsError(emailExists);
       }
       User.findByIdAndUpdate(
         req.user._id,
@@ -86,7 +92,7 @@ const updateUser = (req, res, next) => {
       )
         .then((u) => {
           if (!u) {
-            throw new errors.NotFoundError('Пользователь не найден');
+            throw new errors.NotFoundError(userNotFound);
           }
           return res.status(200).send(u);
         });
@@ -99,7 +105,7 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password, next)
     .then((user) => {
       if (!user) {
-        throw new errors.NotFoundError('Пользователь не найден');
+        throw new errors.NotFoundError(userNotFound);
       }
 
       const { NODE_ENV, JWT_SECRET } = process.env;
