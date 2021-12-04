@@ -12,6 +12,7 @@ const wrongEmailOrPass = 'Неправильные почта или парол�
 const cardNotFound = 'Карточка фильма не найдена';
 const notAllowedToDeleteAnothersFilms = 'У вас нет прав удалять чужие фильмы';
 const cardIdError = 'Ошибка в id карточки';
+const validationError = 'Ошибка валидации ';
 
 module.exports = {
   dbAddress,
@@ -28,4 +29,5 @@ module.exports = {
   cardNotFound,
   notAllowedToDeleteAnothersFilms,
   cardIdError,
+  validationError,
 };

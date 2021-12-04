@@ -7,6 +7,7 @@ const {
   userIdError,
   wrongEmail,
   emailExists,
+  validationError,
 } = require('../utils/constants');
 const User = require('../models/user');
 const errors = require('../errors/errors');
@@ -69,7 +70,7 @@ const createUser = (req, res, next) => {
           })
           .catch((err) => {
             if (err.name === 'ValidationError') {
-              throw new errors.ValidationErrorCode(`Ошибка валидации ${err.message}`);
+              throw new errors.ValidationErrorCode(`${validationError} ${err.message}`);
             }
             throw err;
           })

@@ -4,6 +4,7 @@ const {
   cardNotFound,
   notAllowedToDeleteAnothersFilms,
   cardIdError,
+  validationError,
 } = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
@@ -21,7 +22,7 @@ const createMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new errors.ValidationErrorCode(`Ошибка валидации ${err.message}`);
+        throw new errors.ValidationErrorCode(`${validationError} ${err.message}`);
       }
       throw err;
     })

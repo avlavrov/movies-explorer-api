@@ -36,9 +36,9 @@ mongoose.connect(
 );
 
 app.use('*', cors(options)); // ПЕРВЫМ!
+app.use(requestLogger);
 app.use(limiter);
 app.use(express.json());
-app.use(requestLogger);
 
 app.use(routes);
 
